@@ -1,10 +1,24 @@
-$ ragcheck-ci --dataset questions.jsonl --predictions predictions.jsonl
-| Metric | Result | Required |
-|---|---:|---:|
-| Answer pass rate | 0.0% | 100.0% |
-| Grounded pass rate | 0.0% | 100.0% |
-| Retrieval recall@5 | 100.0% | 100.0% |
-| Case | Details |
-|---|---|
-| `refund-policy` | missing answer phrase: 30 days |
-**RAG checks failed.**
+$ ragcheck-ci --dataset questions.jsonl --predictions predictions.jsonl --k 3
+ragcheck: 5 cases, retrieval cutoff k=3
+
+  Answer pass rate     20.0%  needs 100.0%  below
+  Grounded pass rate   20.0%  needs 100.0%  below
+  Retrieval recall@3   60.0%  needs 100.0%  below
+
+Cases needing attention:
+  refund-window
+    missing answer phrase: "30 days"
+    missing evidence phrase: "30 days"
+  colombo-delivery
+    missing answer phrase: "2 working days"
+    missing evidence phrase: "2 working days"
+    missing relevant docs: shipping-times
+  cash-on-delivery
+    missing answer phrase: "cash on delivery"
+    missing evidence phrase: "cash on delivery"
+    missing relevant docs: payment-methods
+  delete-account
+    missing answer phrase: "Settings"
+    missing evidence phrase: "Settings"
+
+RAG checks failed: 3 of 3 metrics below their threshold.

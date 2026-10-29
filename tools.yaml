@@ -33,6 +33,17 @@ tools:
     pypi: pytest-log-leak
     repo: ShalomHunukumbura/log-leak
 
+  - slug: ragcheck
+    name: ragcheck
+    status: live
+    kind: CLI and GitHub Action
+    category: AI
+    tagline: Catch RAG regressions in pull requests, when the right answer or the right document stops coming back.
+    install: pip install ragcheck-ci
+    pypi: ragcheck-ci
+    repo: ShalomHunukumbura/ragcheck
+    demo: https://github.com/ShalomHunukumbura/ragcheck-demo/pulls
+
   - slug: payhere-sim
     name: payhere-sim
     status: live
@@ -54,12 +65,6 @@ tools:
     repo: ShalomHunukumbura/alembic-guard
     demo: https://github.com/ShalomHunukumbura/alembic-guard-demo/pulls
 
-  - slug: ragcheck
-    name: ragcheck
-    status: building
-    kind: GitHub Action
-    category: AI
-    tagline: Fail a pull request when a RAG pipeline stops giving the answers it used to. Built, not released yet.
 
   - slug: env-check
     name: env-check
