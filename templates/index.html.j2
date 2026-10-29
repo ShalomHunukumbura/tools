@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Developer tools by {{ owner.name }}</title>
+  <meta name="description" content="Open-source pytest plugins, linters and CLIs that catch what code review misses: risky migrations, leaked personal data, deprecations, payment edge cases.">
+  <meta property="og:title" content="Developer tools by {{ owner.name }}">
+  <meta property="og:description" content="Open-source tools that catch what code review misses. Each one installs in a line and runs in CI.">
+  <meta property="og:url" content="{{ site_url }}">
+  <meta property="og:type" content="website">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="static/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="static/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="static/styles.css">
+  <script>
+    // Before first paint, so a saved theme never flashes the other one.
+    try {
+      var saved = localStorage.getItem("theme");
+      if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+    } catch (e) {}
+    document.documentElement.classList.add("js");
+  </script>
+</head>
+<body>
+  <a class="skip" href="#tools">Skip to the tools</a>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="./" aria-label="{{ owner.name }}, developer tools">
+        <span class="brand-name">{{ owner.name }}</span><span class="brand-sep">/</span><span class="brand-page">tools</span>
+      </a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#tools">Tools</a>
+        <a href="#next">Next up</a>
+        <a href="{{ owner.portfolio }}">Portfolio</a>
+        <a class="nav-icon" href="https://github.com/{{ owner.github }}">{{ icon("github-logo", "GitHub") }}</a>
+        <button class="nav-icon theme-toggle" type="button" aria-label="Switch colour theme">
+          <span class="theme-dark">{{ icon("moon") }}</span><span class="theme-light">{{ icon("sun") }}</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="hero-copy rise">
+        <h1>Tools that catch what code review misses.</h1>
+        <p class="hero-sub">Open-source linters, pytest plugins and CLIs for Python teams. Each one installs in a line and runs in CI.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#tools">Browse tools {{ icon("arrow-right") }}</a>
+          <a class="btn btn-ghost" href="https://github.com/{{ owner.github }}">{{ icon("github-logo") }} GitHub</a>
+        </div>
+      </div>
+
+      <nav class="index rise" aria-label="All tools" style="--i: 1">
+        <ol class="index-list">
+          {% for t in live %}
+          <li>
+            <a class="index-row" href="#{{ t.slug }}">
+              <span class="index-name">{{ t.name }}</span>
+              <span class="index-kind">{{ t.kind }}</span>
+              {% if t.version %}<span class="index-version">v{{ t.version }}</span>{% endif %}
+            </a>
+          </li>
+          {% endfor %}
+        </ol>
+        {% if upcoming %}
+        <a class="index-next" href="#next">
+          <span>Next up</span>
+          <span class="index-next-name">{{ upcoming[0].name }}</span>
+          {{ icon("arrow-right") }}
+        </a>
+        {% endif %}
+      </nav>
+    </section>
+
+    <section class="figures wrap" aria-label="In numbers">
+      <dl class="figures-list" data-reveal>
+        <div><dt>Tools released</dt><dd>{{ totals.live }}</dd></div>
+        <div><dt>On PyPI</dt><dd>{{ totals.pypi }}</dd></div>
+        {% if totals.downloads %}<div><dt>Downloads, last 30 days</dt><dd>{{ totals.downloads }}</dd></div>{% endif %}
+        {% if totals.stars %}<div><dt>GitHub stars</dt><dd>{{ totals.stars }}</dd></div>{% endif %}
+        <div><dt>Coming next</dt><dd>{{ upcoming | length }}</dd></div>
+      </dl>
+    </section>
+
+    <section class="tools wrap" id="tools" aria-labelledby="tools-title">
+      <div class="section-head">
+        <h2 id="tools-title">Every tool, with real output.</h2>
+        <p>Each block below is what the tool printed on a real run.</p>
+      </div>
+
+      {% if categories | length > 1 %}
+      <div class="filters" role="group" aria-label="Filter by area">
+        <button type="button" class="filter" aria-pressed="true" data-filter="all">All</button>
+        {% for c in categories %}
+        <button type="button" class="filter" aria-pressed="false" data-filter="{{ c }}">{{ c }}</button>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="grid">
+        {% for t in live %}
+        <article class="tool{% if loop.first %} is-featured{% endif %}" id="{{ t.slug }}" data-category="{{ t.category }}" data-reveal style="--i: {{ loop.index0 % 2 }}">
+          <div class="tool-info">
+            <header class="tool-head">
+              <h3 class="tool-name">{{ t.name }}</h3>
+              <span class="tool-meta">{{ t.kind }}{% if t.version %}<span class="tool-version">v{{ t.version }}</span>{% endif %}</span>
+            </header>
+            <p class="tool-tagline">{{ t.tagline }}</p>
+
+            <div class="install">
+              <code>{{ t.install }}</code>
+              <button type="button" class="copy" data-copy="{{ t.install }}" aria-label="Copy install command">
+                <span class="copy-idle">{{ icon("copy") }}</span><span class="copy-done">{{ icon("check") }}</span>
+              </button>
+            </div>
+
+            <footer class="tool-foot">
+              <div class="tool-links">
+                {% if t.repo_url %}<a href="{{ t.repo_url }}">{{ icon("github-logo") }} Source</a>{% endif %}
+                {% if t.pypi_url %}<a href="{{ t.pypi_url }}">{{ icon("package") }} PyPI</a>{% endif %}
+                {% if t.demo %}<a href="{{ t.demo }}">{{ icon("arrow-up-right") }} Demo</a>{% endif %}
+              </div>
+              {% if t.downloads_label or t.stars %}
+              <div class="tool-stats">
+                {% if t.downloads_label %}<span title="Downloads in the last 30 days">{{ icon("download-simple") }} {{ t.downloads_label }}/mo</span>{% endif %}
+                {% if t.stars %}<span title="GitHub stars">{{ icon("star") }} {{ t.stars }}</span>{% endif %}
+              </div>
+              {% endif %}
+            </footer>
+          </div>
+
+          {% if t.output %}
+          <figure class="term{% if t.output.folds %} is-folded{% endif %}">
+            <figcaption class="term-bar"><span class="term-prompt">$</span><code>{{ t.output.command }}</code></figcaption>
+            <pre class="term-body" tabindex="0" aria-label="Output of {{ t.name }}"><code>{{ t.output.html }}</code></pre>
+            {% if t.output.folds %}<button type="button" class="term-more" aria-expanded="false">Show full output</button>{% endif %}
+          </figure>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% if upcoming %}
+    <section class="next wrap" id="next" aria-labelledby="next-title">
+      <div class="section-head">
+        <h2 id="next-title">Next up.</h2>
+        <p>In the works, in roughly this order.</p>
+      </div>
+      <ol class="next-list">
+        {% for t in upcoming %}
+        <li class="next-item" data-reveal style="--i: {{ loop.index0 }}">
+          <span class="next-status">{{ "Built, release pending" if t.status == "building" else "Planned" }}</span>
+          <h3>{{ t.name }}</h3>
+          <p>{{ t.tagline }}</p>
+          <span class="next-kind">{{ t.kind }}</span>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+    {% endif %}
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap site-foot-inner">
+      <p class="site-foot-name">{{ owner.name }}</p>
+      <nav class="site-foot-links" aria-label="Elsewhere">
+        <a href="https://github.com/{{ owner.github }}">GitHub</a>
+        <a href="{{ owner.portfolio }}">Portfolio</a>
+        <a href="tools.json">tools.json</a>
+      </nav>
+      <p class="site-foot-note">Numbers refresh daily from PyPI and GitHub. Last updated {{ updated }}.</p>
+    </div>
+  </footer>
+
+  <div class="sr-only" aria-live="polite" id="announce"></div>
+  <script src="static/app.js" defer></script>
+</body>
+</html>
