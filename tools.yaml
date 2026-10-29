@@ -1,0 +1,83 @@
+# Every tool on the site, and in the GitHub profile README.
+#
+# To add a tool: add an entry, put a real run of it in outputs/<slug>.txt (first line
+# is the command, starting with "$ "), and push. The site rebuilds itself.
+#
+# status: live (released), building (in progress), or planned.
+# Live tools are ordered by first release on PyPI (fetched), newest first and largest;
+# tools released the same day keep the order they have here.
+
+owner:
+  name: Shalom Hunukumbura
+  github: ShalomHunukumbura
+  portfolio: https://shalomhunukumbura.github.io/portfolio
+
+tools:
+  - slug: deprecation-radar
+    name: deprecation-radar
+    status: live
+    kind: pytest plugin
+    category: Testing
+    tagline: See every deprecation your code depends on, grouped by library, before the upgrade breaks it.
+    install: pip install pytest-deprecation-radar
+    pypi: pytest-deprecation-radar
+    repo: ShalomHunukumbura/deprecation-radar
+
+  - slug: log-leak
+    name: log-leak
+    status: live
+    kind: pytest plugin
+    category: Testing
+    tagline: Fail your test run when personal data or secrets show up in your logs.
+    install: pip install pytest-log-leak
+    pypi: pytest-log-leak
+    repo: ShalomHunukumbura/log-leak
+
+  - slug: payhere-sim
+    name: payhere-sim
+    status: live
+    kind: CLI
+    category: Payments
+    tagline: Test your PayHere integration on your own machine, including the duplicate and late notifications that cost money.
+    install: pipx install payhere-sim
+    pypi: payhere-sim
+    repo: ShalomHunukumbura/payhere-sim
+
+  - slug: alembic-guard
+    name: alembic-guard
+    status: live
+    kind: CLI and GitHub Action
+    category: Databases
+    tagline: Catch Alembic migrations that lock tables or break running code, before they reach production.
+    install: pip install alembic-guard
+    pypi: alembic-guard
+    repo: ShalomHunukumbura/alembic-guard
+    demo: https://github.com/ShalomHunukumbura/alembic-guard-demo/pulls
+
+  - slug: ragcheck
+    name: ragcheck
+    status: building
+    kind: GitHub Action
+    category: AI
+    tagline: Fail a pull request when a RAG pipeline stops giving the answers it used to. Built, not released yet.
+
+  - slug: env-check
+    name: env-check
+    status: planned
+    kind: CLI
+    category: Config
+    tagline: Find environment variables your code reads that no config documents, and the ones nothing reads.
+
+  - slug: dev-doctor
+    name: dev-doctor
+    status: planned
+    kind: CLI
+    category: Onboarding
+    tagline: One command that tells a new developer why the project won't run, and how to fix it.
+
+  - slug: pr-deps
+    name: pr-deps
+    status: planned
+    kind: GitHub Action
+    category: Security
+    tagline: A readable pull request comment on what a lockfile change actually pulls in.

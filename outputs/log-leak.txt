@@ -1,0 +1,16 @@
+$ pytest
+..                                                                       [100%]
+=================================== log-leak ===================================
+app/auth.py:8  LL006 credential  A value under a key like password, secret or token was logged.
+    in login(), logger 'app.auth' at WARNING
+    message: login failed for {'username': 'amal', 'password': '<credential>'}
+    template: login failed for %s
+    first seen in: tests/test_app.py::test_wrong_password
+    fix: Log only the fields you need, or mask sensitive keys before logging.
+app/users.py:7  LL009 email  An email address was logged.
+    in create_user(), logger 'app.users' at INFO
+    message: created user <email>
+    first seen in: tests/test_app.py::test_create
+    fix: Log an internal user ID instead.
+log-leak: found 2 leaks at 2 call sites, logged by 2 tests.
+2 passed in 0.02s

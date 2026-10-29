@@ -1,0 +1,36 @@
+$ payhere-sim check http://localhost:8000/payhere/notify \
+    --new-order http://localhost:8000/orders --probe "http://localhost:8000/orders/{order_id}"
+
+payhere-sim check → http://localhost:8000/payhere/notify
+
+  ✓ ignores a notification with a forged signature
+  ✗ ignores a signed success for less than the order total
+      state changed: credits: 0 → 100; status: unpaid → paid
+      If the checkout hash is made in the browser, a customer can change the
+      amount and pay less. Check payhere_amount equals the order total before
+      marking it paid.
+  ✗ ignores a signed success in the wrong currency
+      state changed: credits: 0 → 100; status: unpaid → paid
+      A notification for 1,000 USD is not 1,000 LKR. Check payhere_currency
+      matches the order.
+  ✓ records a valid success notification
+  ✓ processes a repeated notification only once
+  ✗ keeps the order paid when a late 'pending' arrives
+      state changed: status: paid → pending
+      Notifications aren't guaranteed to arrive in order. Never move an order
+      backwards from paid because of an older status.
+  ✗ keeps the order paid when an earlier failed attempt arrives late
+      state changed: status: pending → failed
+      Each payment attempt has its own payment_id. A failed attempt's
+      notification can arrive after the successful one: it must not un-pay the
+      order.
+  ✗ processes simultaneous duplicates only once
+      5 at once vs one: credits: 100 → 500
+      Retries can arrive at the same moment. Two requests that both read 'not
+      paid yet' will both fulfil the order. Mark it paid with one atomic UPDATE
+      ... WHERE status != 'paid' (or a unique constraint on payment_id) and only
+      fulfil if that update changed a row.
+  ✓ answers valid notifications with HTTP 2xx
+  ✓ records a chargeback
+
+5 passed, 5 failed · orders used: 2, 3, 4, 5, 6

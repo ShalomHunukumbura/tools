@@ -1,0 +1,10 @@
+$ ragcheck-ci --dataset questions.jsonl --predictions predictions.jsonl
+| Metric | Result | Required |
+|---|---:|---:|
+| Answer pass rate | 0.0% | 100.0% |
+| Grounded pass rate | 0.0% | 100.0% |
+| Retrieval recall@5 | 100.0% | 100.0% |
+| Case | Details |
+|---|---|
+| `refund-policy` | missing answer phrase: 30 days |
+**RAG checks failed.**

@@ -1,0 +1,10 @@
+$ alembic-guard
+migrations/versions/0002_add_email.py:13:5  AG001 error  Adding NOT NULL column "users.email" without a server_default fails on a table with rows.
+    fix: Add a server_default, or add the column as nullable, backfill it, then set NOT NULL in a later migration.
+migrations/versions/0002_add_email.py:14:5  AG002 warning  Creating index "ix_users_email" on "users" blocks writes until it is built.
+    fix: Pass postgresql_concurrently=True and run it inside `with op.get_context().autocommit_block():`.
+migrations/versions/0002_add_email.py:15:5  AG004 error  Renaming "users.name" to "full_name" breaks code still using the old name.
+    fix: Expand and contract: add the new column or table, write to both, backfill, move reads over, then drop the old one in a later release.
+migrations/versions/0002_add_email.py:16:5  AG008 warning  Foreign key from "orders" to "users" is validated while blocking writes on both tables.
+    fix: Pass postgresql_not_valid=True, then run `ALTER TABLE ... VALIDATE CONSTRAINT ...` in a separate migration. Validation only takes a light lock.
+Found 2 errors and 2 warnings in 3 migrations.
