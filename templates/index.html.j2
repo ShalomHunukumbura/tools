@@ -9,36 +9,33 @@
   <meta property="og:description" content="Open-source tools that catch what code review misses. Each one installs in a line and runs in CI.">
   <meta property="og:url" content="{{ site_url }}">
   <meta property="og:type" content="website">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0c0d0f">
   <link rel="icon" href="static/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="static/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="static/styles.css">
-  <script>
-    // Before first paint, so a saved theme never flashes the other one.
-    try {
-      var saved = localStorage.getItem("theme");
-      if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
-    } catch (e) {}
-    document.documentElement.classList.add("js");
-  </script>
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
   <a class="skip" href="#tools">Skip to the tools</a>
 
   <header class="nav">
     <div class="wrap nav-inner">
-      <a class="brand" href="./" aria-label="{{ owner.name }}, developer tools">
-        <span class="brand-name">{{ owner.name }}</span><span class="brand-sep">/</span><span class="brand-page">tools</span>
+      <a class="brand" href="{{ owner.portfolio }}/" aria-label="{{ owner.name }}, portfolio">
+        <span class="brand-mark" aria-hidden="true">SH</span>
+        <span class="brand-name">{{ owner.name }}</span>
       </a>
-      <nav class="nav-links" aria-label="Main">
-        <a href="#tools">Tools</a>
-        <a href="#next">Next up</a>
-        <a href="{{ owner.portfolio }}">Portfolio</a>
-        <a class="nav-icon" href="https://github.com/{{ owner.github }}">{{ icon("github-logo", "GitHub") }}</a>
-        <button class="nav-icon theme-toggle" type="button" aria-label="Switch colour theme">
-          <span class="theme-dark">{{ icon("moon") }}</span><span class="theme-light">{{ icon("sun") }}</span>
-        </button>
+      <nav class="nav-links" id="nav-links" aria-label="Primary">
+        <a href="{{ owner.portfolio }}/#experience">Experience</a>
+        <a href="{{ owner.portfolio }}/#projects">Projects</a>
+        <a href="{{ owner.portfolio }}/#skills">Skills</a>
+        <a href="./" aria-current="page">Tools</a>
+        <a href="{{ owner.portfolio }}/learning-log.html">Learning Log</a>
       </nav>
+      <div class="nav-actions">
+        <a class="btn btn-primary btn-sm" href="{{ owner.portfolio }}/#contact">Get in touch</a>
+        <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      </div>
     </div>
   </header>
 
@@ -73,16 +70,6 @@
         </a>
         {% endif %}
       </nav>
-    </section>
-
-    <section class="figures wrap" aria-label="In numbers">
-      <dl class="figures-list" data-reveal>
-        <div><dt>Tools released</dt><dd>{{ totals.live }}</dd></div>
-        <div><dt>On PyPI</dt><dd>{{ totals.pypi }}</dd></div>
-        {% if totals.downloads %}<div><dt>Downloads, last 30 days</dt><dd>{{ totals.downloads }}</dd></div>{% endif %}
-        {% if totals.stars %}<div><dt>GitHub stars</dt><dd>{{ totals.stars }}</dd></div>{% endif %}
-        <div><dt>Coming next</dt><dd>{{ upcoming | length }}</dd></div>
-      </dl>
     </section>
 
     <section class="tools wrap" id="tools" aria-labelledby="tools-title">
@@ -123,10 +110,9 @@
                 {% if t.pypi_url %}<a href="{{ t.pypi_url }}">{{ icon("package") }} PyPI</a>{% endif %}
                 {% if t.demo %}<a href="{{ t.demo }}">{{ icon("arrow-up-right") }} Demo</a>{% endif %}
               </div>
-              {% if t.downloads_label or t.stars %}
+              {% if t.stars %}
               <div class="tool-stats">
-                {% if t.downloads_label %}<span title="Downloads in the last 30 days">{{ icon("download-simple") }} {{ t.downloads_label }}/mo</span>{% endif %}
-                {% if t.stars %}<span title="GitHub stars">{{ icon("star") }} {{ t.stars }}</span>{% endif %}
+                <span title="GitHub stars">{{ icon("star") }} {{ t.stars }}</span>
               </div>
               {% endif %}
             </footer>
@@ -166,13 +152,12 @@
 
   <footer class="site-foot">
     <div class="wrap site-foot-inner">
-      <p class="site-foot-name">{{ owner.name }}</p>
+      <p>© {{ year }} {{ owner.name }}</p>
       <nav class="site-foot-links" aria-label="Elsewhere">
         <a href="https://github.com/{{ owner.github }}">GitHub</a>
-        <a href="{{ owner.portfolio }}">Portfolio</a>
         <a href="tools.json">tools.json</a>
+        <a href="{{ owner.portfolio }}/">Back to portfolio</a>
       </nav>
-      <p class="site-foot-note">Numbers refresh daily from PyPI and GitHub. Last updated {{ updated }}.</p>
     </div>
   </footer>
 

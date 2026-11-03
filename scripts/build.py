@@ -143,6 +143,7 @@ def load() -> dict:
             "stars": stars,
         },
         "updated": f"{updated.day} {updated:%b %Y}",
+        "year": updated.year,
         "site_url": SITE_URL,
     }
 

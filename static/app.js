@@ -1,7 +1,6 @@
-// Small enhancements on top of a page that works without them: theme switch, copy
+// Small enhancements on top of a page that works without them: mobile menu, copy
 // buttons, filters, folding long outputs, and reveal-on-scroll.
 
-const root = document.documentElement;
 const announce = document.getElementById("announce");
 
 function say(message) {
@@ -9,14 +8,20 @@ function say(message) {
   requestAnimationFrame(() => { announce.textContent = message; });
 }
 
-// Theme: follows the system until the reader picks one, then remembers it.
-document.querySelector(".theme-toggle")?.addEventListener("click", () => {
-  const current = root.dataset.theme
-    || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-  const next = current === "dark" ? "light" : "dark";
-  root.dataset.theme = next;
-  try { localStorage.setItem("theme", next); } catch (e) {}
-  say(`${next[0].toUpperCase()}${next.slice(1)} theme`);
+// Mobile menu, the same one the portfolio uses.
+const nav = document.querySelector(".nav");
+const menuButton = document.querySelector(".menu-btn");
+const setMenu = (open) => {
+  nav.classList.toggle("is-open", open);
+  menuButton.setAttribute("aria-expanded", String(open));
+  menuButton.textContent = open ? "Close" : "Menu";
+};
+menuButton?.addEventListener("click", () => setMenu(!nav.classList.contains("is-open")));
+document.getElementById("nav-links")?.addEventListener("click", (e) => {
+  if (e.target.closest("a")) setMenu(false);
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && nav.classList.contains("is-open")) { setMenu(false); menuButton.focus(); }
 });
 
 // Copy install commands.
