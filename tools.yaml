@@ -68,10 +68,12 @@ tools:
 
   - slug: no-hang
     name: no-hang
-    status: planned
+    status: live
     kind: CLI and GitHub Action
     category: Reliability
     tagline: Find network, database and process calls that can wait forever, before one takes your site down.
+    install: "uses: ShalomHunukumbura/no-hang@v0.1.0"
+    repo: ShalomHunukumbura/no-hang
 
   - slug: dev-doctor
     name: dev-doctor

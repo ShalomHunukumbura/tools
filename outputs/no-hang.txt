@@ -1,0 +1,10 @@
+$ no-hang
+app/payments.py:10:16  NH001 error  self.session.post() has no timeout, and a requests.Session has no default, so it waits forever if the server stops answering. Setting the session's .timeout does nothing in requests.
+    fix: Pass timeout=(connect, read) in seconds, e.g. timeout=(3.05, 30). The read timeout is the longest gap between bytes, not the total time.
+web/db.ts:4:21  NH006 warning  new Pool() has no connectionTimeoutMillis, so once every connection is busy, the next query waits forever for one.
+    fix: Pass connectionTimeoutMillis: 5000.
+web/db.ts:5:20  NH001 error  axios.create() has no timeout, so every request through this instance waits forever if the server stops answering.
+    fix: Pass { timeout: 10000 } in milliseconds, or set it once with axios.create({ timeout }) or axios.defaults.timeout.
+worker/main.go:6:12  NH001 error  http.Get() uses http.DefaultClient, which has no timeout, so it waits forever if the server stops answering.
+    fix: Make an http.Client{Timeout: 10 * time.Second}, or build requests with http.NewRequestWithContext and a context.WithTimeout.
+Found 3 errors and 1 warning in 3 files.
