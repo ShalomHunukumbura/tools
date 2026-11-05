@@ -127,7 +127,7 @@ code, pre { font-family: var(--mono); }
 .brand-name { font-size: 15px; }
 
 .nav-links { display: flex; align-items: center; gap: 28px; }
-.nav-links a { color: var(--muted); font-size: 14px; transition: color 0.2s; }
+.nav-links a { color: var(--muted); font-size: 14px; white-space: nowrap; transition: color 0.2s; }
 .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--text); }
 
 .nav-actions { display: flex; align-items: center; gap: 8px; }
@@ -410,6 +410,12 @@ code, pre { font-family: var(--mono); }
 }
 
 /* --- small screens ------------------------------------------------------------ */
+
+/* Six links fit beside the full name above 1040px; below that, the mark stands for it. */
+@media (max-width: 1040px) {
+  .nav-links { gap: 22px; }
+  .brand-name { display: none; }
+}
 
 @media (max-width: 960px) {
   .hero { grid-template-columns: minmax(0, 1fr); gap: 48px; }
