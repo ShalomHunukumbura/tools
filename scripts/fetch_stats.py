@@ -5,7 +5,8 @@
 """Fetch live numbers for every released tool and write them to data/stats.json.
 
 PyPI gives the version and release dates, pypistats.org the downloads in the last 30
-days, GitHub the stars. A source that fails is skipped: the site shows what it has.
+days, GitHub the stars. A tool that isn't on PyPI gets its version and dates from its
+GitHub releases instead. A source that fails is skipped: the site shows what it has.
 
     uv run scripts/fetch_stats.py
 """
@@ -52,6 +53,19 @@ def pypi_stats(package: str) -> dict:
     return stats
 
 
+def github_release_stats(repo: str) -> dict:
+    stats: dict = {}
+    releases = get_json(f"https://api.github.com/repos/{repo}/releases?per_page=100")
+    published = [r for r in releases or [] if not r["draft"] and not r["prerelease"]]
+    if published:
+        dates = sorted(r["published_at"][:10] for r in published)
+        newest = max(published, key=lambda r: r["published_at"])
+        stats["version"] = newest["tag_name"].removeprefix("v")
+        stats["first_release"] = dates[0]
+        stats["latest_release"] = dates[-1]
+    return stats
+
+
 def main() -> None:
     config = yaml.safe_load((ROOT / "tools.yaml").read_text())
     result: dict = {"fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "tools": {}}
@@ -59,7 +73,12 @@ def main() -> None:
         if tool["status"] != "live":
             continue
         print(f"{tool['slug']}:")
-        stats = pypi_stats(tool["pypi"]) if tool.get("pypi") else {}
+        if tool.get("pypi"):
+            stats = pypi_stats(tool["pypi"])
+        elif tool.get("repo"):
+            stats = github_release_stats(tool["repo"])
+        else:
+            stats = {}
         if tool.get("repo"):
             repo = get_json(f"https://api.github.com/repos/{tool['repo']}")
             if repo:
