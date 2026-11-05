@@ -66,12 +66,12 @@ tools:
     demo: https://github.com/ShalomHunukumbura/alembic-guard-demo/pulls
 
 
-  - slug: env-check
-    name: env-check
+  - slug: no-hang
+    name: no-hang
     status: planned
-    kind: CLI
-    category: Config
-    tagline: Find environment variables your code reads that no config documents, and the ones nothing reads.
+    kind: CLI and GitHub Action
+    category: Reliability
+    tagline: Find network, database and process calls that can wait forever, before one takes your site down.
 
   - slug: dev-doctor
     name: dev-doctor
